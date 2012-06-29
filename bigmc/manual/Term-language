@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>User Manual - BigMC Bigraphical Model Checker</title>
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10255629-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<div id="header">
+<h1>BigMC -- Bigraphical Model Checker</h1>
+ <div id="menu">
+  <ul id="nav">
+   <li><a href="/bigmc/">Home</a></li>
+   <li><a href="index.html">Manual</a></li>
+   <li><a href="https://github.com/bigmc/bigmc">GitHub</a></li>
+  </ul>
+ </div>
+</div>
+<div id="content">
+<div id="right">
+
+
+<div class="node">
+<p>
+<a name="Term-language"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Property-language#Property-language">Property language</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="BGM-file-structure#BGM-file-structure">BGM file structure</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Term language</h2>
+
+<p>The term language is relatively simple. It uses the control names and inner and outer names
+as defined in the preamble.  The full grammar is given by:
+
+<pre class="example">     <var>T</var> ::= <var>K</var>.<var>T</var>
+     <var>T</var> ::= <var>T</var> | <var>T</var>
+     <var>T</var> ::= <var>T</var> || <var>T</var>
+     <var>T</var> ::= $<var>n</var>
+     <var>T</var> ::= <var>K</var>
+     <var>T</var> ::= <var>nil</var>
+     
+     <var>K</var> ::= <var>k</var>[<var>names</var>]
+     <var>K</var> ::= <var>k</var>
+     
+     <var>names</var> ::= <var>n</var> , <var>names</var>
+     <var>names</var> ::= <var>n</var>
+     
+     <var>n</var> ::= [a-zA-Z][a-zA-Z0-9]*
+     <var>n</var> ::= -
+</pre>
+   <p>Where <var>k</var> is drawn from the set of controls.  Using <code>-</code> as a link name
+(e.g. <code>foo[-,x].P</code> leaves the first port of the <var>foo</var> node unlinked,
+and links the second port to <var>x</var>.  Ports are linked in-order, so all ports must be
+present at every prefix, whether they are linked or not.
+
+<h3 class="section">5.1 Reaction Rules</h3>
+
+<p>All terms of the form <var>T</var><code> -&gt; </code><var>T</var><code>;</code> are considered to be reaction rules for the
+model under construction.  Order is not significant.  For example:
+
+<pre class="example">     send[x].$0 | recv[x].$1 -&gt; $0 | $1;
+</pre>
+   <p>Names that do not appear in <code>%name</code> definitions are considered free names
+and will be bound during matching.  Names that are defined in the name set will be matched
+literally, and will not be re-bound.
+
+   <p>The double-parallel operator (<code>||</code>) introduces new top-level regions.  These can only appear at the top-level, and only in reaction rules.  The number of regions in the redex and reactum must agree, e.g.:
+
+<pre class="example">     a.$0 || b.$1 -&gt; c.$0 || d.$0;
+</pre>
+   <p>is a valid rule, however the following is not:
+
+<pre class="example">     a.$0 || b.$1 -&gt; c.$0;
+</pre>
+   <p>A word of warning:  The error detection for wide reaction rules is rather fragile in the current version.  You would be well advised to be careful when constructing complex wide rules.
+
+<h3 class="section">5.2 Model Definition</h3>
+
+<p>There can be at most one model definition per model file &mdash; this will always be the last line
+in the file of the form <var>T</var><code>;</code>.  It may appear anywhere in the file before the <code>%check</code> line, and after any definitions upon which it depends.  Order with respect to reaction
+rules is not significant.  Continuing from the previous sections, we could define a complete
+model:
+
+<pre class="example">     %passive send : 1;
+     %passive recv : 1;
+     %name a;
+     %name b;
+     
+     send[x].$0 | recv[x].$1 -&gt; $0 | $1;
+     
+     # The model definition
+     send[a].recv[b].send[a] | recv[a].send[b].recv[b];
+</pre>
+   <p>We now have a complete model file suitable to use for checking.
+
+   
+</div>
+	
+<div id="left">
+	<div class="box">
+	
+<div class="node">
+<p>
+<a name="Table-of-Contents"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Example#Example">Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered"></h2>
+
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index#Top">BigMC</a>
+<li><a name="toc_Introduction" href="Introduction#Introduction">1 Introduction</a>
+<ul>
+<li><a href="Introduction#Introduction">1.1 A cautionary note</a>
+<li><a href="Introduction#Introduction">1.2 About BigMC</a>
+</li></ul>
+<li><a name="toc_Obtaining-BigMC" href="Obtaining-BigMC#Obtaining-BigMC">2 Obtaining BigMC</a>
+<ul>
+<li><a href="Obtaining-BigMC#Obtaining-BigMC">2.1 Installation</a>
+<li><a href="Obtaining-BigMC#Obtaining-BigMC">2.2 Configuration</a>
+</li></ul>
+<li><a name="toc_Invoking-bigmc" href="Invoking-bigmc#Invoking-bigmc">3 Invoking bigmc</a>
+<ul>
+<li><a href="Invoking-bigmc#Invoking-bigmc">3.1 Command Line Options</a>
+</li></ul>
+<li><a name="toc_BGM-file-structure" href="BGM-file-structure#BGM-file-structure">4 BGM file structure</a>
+<ul>
+<li><a href="BGM-file-structure#BGM-file-structure">4.1 Comments</a>
+<li><a href="BGM-file-structure#BGM-file-structure">4.2 Control Definitions</a>
+<li><a href="BGM-file-structure#BGM-file-structure">4.3 Names</a>
+</li></ul>
+<li><a name="toc_Term-language" href="Term-language#Term-language">5 Term language</a>
+<ul>
+<li><a href="Term-language#Term-language">5.1 Reaction Rules</a>
+<li><a href="Term-language#Term-language">5.2 Model Definition</a>
+</li></ul>
+<li><a name="toc_Property-language" href="Property-language#Property-language">6 Property language</a>
+<ul>
+<li><a href="Property-language#Property-language">6.1 Property Expressions</a>
+<li><a href="Property-language#Property-language">6.2 Pre-defined Scopes</a>
+<li><a href="Property-language#Property-language">6.3 Pre-defined Predicates</a>
+<ul>
+<li><a href="Property-language#Property-language">6.3.1 <code>size()</code> Predicate</a>
+<li><a href="Property-language#Property-language">6.3.2 <code>matches(</code><var>t</var><code>)</code> Predicate</a>
+<li><a href="Property-language#Property-language">6.3.3 <code>empty() Predicate</code></a>
+<li><a href="Property-language#Property-language">6.3.4 <code>terminal() Predicate</code></a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Checking" href="Checking#Checking">7 Checking</a>
+<li><a name="toc_Example" href="Example#Example">8 Example</a>
+<li><a name="toc_Table-of-Contents" href="Table-of-Contents#Table-of-Contents"></a>
+</li></ul>
+</div>
+
+
+	</div>
+	<div class="box">
+<p>This work funded in part by the Danish Research Agency (grant no.:  2106-080046)
+       and the <a href="http://itu.dk">IT University of Copenhagen</a> (the <a href="http://www.itu.dk/en/Forskning/Forskningsprojekter/Jingling-Genies">Jingling Genies project</a>)</p>
+		
+		<center>&copy; Copyright 2011 <a href="http://itu.dk/~gdpe/">Gian Perrone</a></center>
+	</div>
+</div>
+</div>
+</body>
+</html>
+
+
