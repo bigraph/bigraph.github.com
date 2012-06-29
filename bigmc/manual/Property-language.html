@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>User Manual - BigMC Bigraphical Model Checker</title>
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10255629-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<div id="header">
+<h1>BigMC -- Bigraphical Model Checker</h1>
+ <div id="menu">
+  <ul id="nav">
+   <li><a href="/bigmc/">Home</a></li>
+   <li><a href="index.html">Manual</a></li>
+   <li><a href="https://github.com/bigmc/bigmc">GitHub</a></li>
+  </ul>
+ </div>
+</div>
+<div id="content">
+<div id="right">
+
+
+<div class="node">
+<p>
+<a name="Property-language"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Checking.html">Checking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Term-language.html">Term language</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">6 Property language</h2>
+
+<p>Having defined a model in the previous section, we want to start to be able to make some
+kind of specification of properties which we would like to ensure hold.  We do this using the
+<code>%property</code> specifier, which is of the form:
+
+<pre class="example">     %property <var>property-name</var> <var>property-expression</var>;
+</pre>
+   <p>The <var>property-name</var> is a non-semantically-significant name which will be reported if the
+checker encounters a violation of a property during checking.
+
+   <p>A single <samp><span class="file">.bgm</span></samp> file can have arbitrarily many <code>%property</code> declarations.  The order
+in which they appear in the file will be the order in which they are considered at each new
+state; it may be a sensible strategy to place matches more likely to fail earlier in the
+file.
+
+<h3 class="section">6.1 Property Expressions</h3>
+
+<p>The basic unit of most property expressions is the <dfn>predicate</dfn>.  An exhaustive list of
+available predicates will be provided in a subsequent section of this manual.  Aside from
+predicates, various familiar programming language logical connectives are provided:
+
+<pre class="example">     <var>P</var> ::= <var>B</var> &amp;&amp; <var>B</var>
+     <var>P</var> ::= <var>B</var> || <var>B</var>
+     <var>P</var> ::= !<var>B</var>
+     
+     <var>B</var> ::= <var>E</var> == <var>E</var>
+     <var>B</var> ::= <var>E</var> != <var>E</var>
+     <var>B</var> ::= <var>E</var> &lt;= <var>E</var>
+     <var>B</var> ::= <var>E</var> &gt;= <var>E</var>
+     <var>B</var> ::= <var>E</var> &lt; <var>E</var>
+     <var>B</var> ::= <var>E</var> &gt; <var>E</var>
+     
+     <var>E</var> ::= <var>predicate</var>(<var>parameters</var>)
+     <var>E</var> ::= <var>integer literal</var>
+</pre>
+   <p>The essential execution model associated with these properties is that each time a new state is
+discovered and considered, the predicates are applied to <em>that state</em>.  The simplest
+property we could define might be:
+
+<pre class="example">     %property not_empty !empty();
+</pre>
+   <p>Assuming we have some (pre-defined) predicate called <code>empty</code> that takes no arguments, then
+this property will be satisfied iff every state in the model is not empty.
+
+   <p>It turns out that this is sufficient to write specifications that inspect the properties of
+individual states, but what if we want to write a specification that defines properties
+over states as they evolve?  We have another mechanism for that:
+
+<pre class="example">     %property growth size() &gt;= $pred-&gt;size();
+</pre>
+   <p>This property assumes that we have a pre-existing predicate called <code>size</code> that returns the
+&ldquo;size&rdquo; of a given term (spoiler alert: we do).  The first application of the predicate
+<code>size</code> will evaluate to the size of the current state under consideration.  The second
+instance of the predicate is prefixed with <code>$pred</code> (short for <em>predecessor</em>), which
+is a placeholder for &ldquo;the state from which the current state was created by a step of
+reaction&rdquo;, so in this instance <code>size</code> is being applied to the predecessor state, not
+the current state.  Finally, taking the greater-than-or-equal-to connective <code>&gt;=</code>, this is a
+property stating that this model must never shrink through a step of reaction.  If the checker
+can find any two consecutive states in the transition system where a state is smaller than
+the one from which it is derived, this will constitute a violation of the <samp><span class="file">growth</span></samp>
+property.
+
+<h3 class="section">6.2 Pre-defined Scopes</h3>
+
+<p>The full list of scopes:
+
+     <ul>
+<li><code>$pred</code>
+The predecessor to the current state, such that there exists some step of reaction from
+ <code>$pred</code> to the current state. 
+<li><code>$this</code>
+The current state. 
+<li><code>$succ</code>
+The set of successor states, i.e., those reachable by a step of reaction from the current state. 
+<li><code>$terminal</code>
+The predicate in question is only applied to states marked <code>terminal</code>, that is, they
+do not lead to any further states and there are no reactions that can be applied to them. 
+<code>$terminal-&gt;p()</code> will return <code>true</code> when applied to non-terminal states, or
+<code>p()</code> if applied to a terminal state. 
+<li>... More to come?  Suggest more useful scopes! 
+</ul>
+
+   <p>It's important to note that scopes like <code>$succ</code> and <code>pred</code> will not work when in
+local checking mode!
+
+<h3 class="section">6.3 Pre-defined Predicates</h3>
+
+<h4 class="subsection">6.3.1 <code>size()</code> Predicate</h4>
+
+<p>This predicate returns a count of the number of place-graph nodes in the current agent.  For example:
+
+<pre class="example">     a.a.a.nil --&gt; 3
+     a.nil | b.nil --&gt; 2
+     nil | nil | nil --&gt; 0
+     nil --&gt; 0
+</pre>
+   <p>This can be used to construct properties such as:
+
+<pre class="example">     %property growth $pred-&gt;size() &lt;= size();
+</pre>
+   <h4 class="subsection">6.3.2 <code>matches(</code><var>t</var><code>)</code> Predicate</h4>
+
+<p>This checks whether a given redex <var>t</var> matches anywhere within the current agent, subject to the usual active contexts restriction.  For example:
+
+<pre class="example">     %active a : 0;
+     %active b : 0;
+     %active c : 0;
+     
+     a.b | a.c;
+     
+     a.$1 | $0 -&gt; c.$1 | $0;
+     
+     %property cc !matches(c.c);
+     
+     %check
+</pre>
+   <h4 class="subsection">6.3.3 <code>empty() Predicate</code></h4>
+
+<p>This is equivalent to the property <code>size() == 0</code>.
+
+<h4 class="subsection">6.3.4 <code>terminal() Predicate</code></h4>
+
+<p>This checks the property of the current node in the transition system and returns <code>false</code> if the node has outgoing edges (i.e. there are further agents reachable by the application of some reaction rule to this agent), or <code>true</code> otherwise.  See <samp><span class="file">doc/examples/dining.bgm</span></samp> for an example use of this predicate to define deadlock-freedom.
+
+   
+</div>
+	
+<div id="left">
+	<div class="box">
+	
+<div class="node">
+<p>
+<a name="Table-of-Contents"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Example.html">Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered"></h2>
+
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html">BigMC</a>
+<li><a name="toc_Introduction" href="Introduction.html">1 Introduction</a>
+<ul>
+<li><a href="Introduction.html">1.1 A cautionary note</a>
+<li><a href="Introduction.html">1.2 About BigMC</a>
+</li></ul>
+<li><a name="toc_Obtaining-BigMC" href="Obtaining-BigMC.html">2 Obtaining BigMC</a>
+<ul>
+<li><a href="Obtaining-BigMC.html">2.1 Installation</a>
+<li><a href="Obtaining-BigMC.html">2.2 Configuration</a>
+</li></ul>
+<li><a name="toc_Invoking-bigmc" href="Invoking-bigmc.html">3 Invoking bigmc</a>
+<ul>
+<li><a href="Invoking-bigmc.html">3.1 Command Line Options</a>
+</li></ul>
+<li><a name="toc_BGM-file-structure" href="BGM-file-structure.html">4 BGM file structure</a>
+<ul>
+<li><a href="BGM-file-structure.html">4.1 Comments</a>
+<li><a href="BGM-file-structure.html">4.2 Control Definitions</a>
+<li><a href="BGM-file-structure.html">4.3 Names</a>
+</li></ul>
+<li><a name="toc_Term-language" href="Term-language.html">5 Term language</a>
+<ul>
+<li><a href="Term-language.html">5.1 Reaction Rules</a>
+<li><a href="Term-language.html">5.2 Model Definition</a>
+</li></ul>
+<li><a name="toc_Property-language" href="Property-language.html">6 Property language</a>
+<ul>
+<li><a href="Property-language.html">6.1 Property Expressions</a>
+<li><a href="Property-language.html">6.2 Pre-defined Scopes</a>
+<li><a href="Property-language.html">6.3 Pre-defined Predicates</a>
+<ul>
+<li><a href="Property-language.html">6.3.1 <code>size()</code> Predicate</a>
+<li><a href="Property-language.html">6.3.2 <code>matches(</code><var>t</var><code>)</code> Predicate</a>
+<li><a href="Property-language.html">6.3.3 <code>empty() Predicate</code></a>
+<li><a href="Property-language.html">6.3.4 <code>terminal() Predicate</code></a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Checking" href="Checking.html">7 Checking</a>
+<li><a name="toc_Example" href="Example.html">8 Example</a>
+<li><a name="toc_Table-of-Contents" href="Table-of-Contents.html"></a>
+</li></ul>
+</div>
+
+
+	</div>
+	<div class="box">
+<p>This work funded in part by the Danish Research Agency (grant no.:  2106-080046)
+       and the <a href="http://itu.dk">IT University of Copenhagen</a> (the <a href="http://www.itu.dk/en/Forskning/Forskningsprojekter/Jingling-Genies">Jingling Genies project</a>)</p>
+		
+		<center>&copy; Copyright 2011 <a href="http://itu.dk/~gdpe/">Gian Perrone</a></center>
+	</div>
+</div>
+</div>
+</body>
+</html>
+
+
