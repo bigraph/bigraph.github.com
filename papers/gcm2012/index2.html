@@ -3,7 +3,7 @@
 	<head>
 		<title>Big Red: A Development Environment for Bigraphs</title>
 		<style type="text/css">
-img {
+div.figure > img {
 	max-width: 90%;
 }
 
@@ -23,8 +23,18 @@ div.figure {
 	padding: 0.5em;
 }
 
-span.rule-name, span.control-name {
+div.figure td {
+	padding: 0.5em;
+	vertical-align: bottom;
+}
+
+span.rule-name, span.control-name, span.name-name {
 	font-family: monospace;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
 }
 		</style>
 	</head>
@@ -46,51 +56,28 @@ span.rule-name, span.control-name {
 		<h3>
 			The signature
 		</h3>
-		<h4>
-			The <span class="control-name">Room</span> control
-		</h4>
-		<div class="figure">
-			<img src="images/control-room.png" />
-		</div>
-		<p>
-			abacus
-		</p>
-		<h4>
-			The <span class="control-name">User</span> control
-		</h4>
-		<div class="figure">
-			<img src="images/control-user.png" />
-		</div>
-		<p>
-			backgammon
-		</p>
-		<h4>
-			The <span class="control-name">Spool</span> control
-		</h4>
-		<div class="figure">
-			<img src="images/control-spool.png" />
-		</div>
-		<p>
-			coconut
-		</p>
-		<h4>
-			The <span class="control-name">Printer</span> control
-		</h4>
-		<div class="figure">
-			<img src="images/control-printer.png" />
-		</div>
-		<p>
-			diagonal
-		</p>
-		<h4>
-			The <span class="control-name">Job</span> control
-		</h4>
-		<div class="figure">
-			<img src="images/control-job.png" />
-		</div>
-		<p>
-			emancipator
-		</p>
+		<div class="figure"><table><tr>
+			<td>
+				<img src="images/control-room.png" /><br />
+				<span class="control-name">Room</span>
+			</td>
+			<td>
+				<img src="images/control-user.png" /><br />
+				<span class="control-name">User</span>
+			</td>
+			<td>
+				<img src="images/control-spool.png" /><br />
+				<span class="control-name">Spool</span>
+			</td>
+			<td>
+				<img src="images/control-printer.png" /><br />
+				<span class="control-name">Printer</span>
+			</td>
+			<td>
+				<img src="images/control-job.png" /><br />
+				<span class="control-name">Job</span>
+			</td>
+		</tr></table></div>
 		<h3>
 			The rules
 		</h3>
@@ -101,7 +88,13 @@ span.rule-name, span.control-name {
 			<img src="images/rule-move-room.png" />
 		</div>
 		<p>
-			fraudulent
+			The <span class="rule-name">MoveRoom</span> rule
+			matches a User (represented by a
+			<span class="control-name">U</span> control), and
+			selects any two rooms that are connected by some name
+			<span class="name-name">a</span>.  It then permits
+			the user to move to the other room, leaving the
+			contents of each room otherwise unchanged.
 		</p>
 		<h4>
 			The <span class="finish-job">FinishJob</span> rule
@@ -110,7 +103,11 @@ span.rule-name, span.control-name {
 			<img src="images/rule-finish-job.png" />
 		</div>
 		<p>
-			groovy
+			<span class="rule-name">FinishJob</span> captures
+			the idea of a printer finishing a job (by executing the
+			actual print process), and the job is therefore removed
+			completely from the system by this rule, disconnecting
+			it from its associated user.
 		</p>
 		<h4>
 			The <span class="rule-name">JobToPrinter</span> rule
@@ -119,7 +116,11 @@ span.rule-name, span.control-name {
 			<img src="images/rule-job-to-printer.png" />
 		</div>
 		<p>
-			happiness
+			<span class="rule-name">JobToPrinter</span>
+			transfers a job from the spool to a printer
+			(represented by a
+			<span class="control-name">P</span> control) that is
+			co-located with the user associated with that job.
 		</p>
 		<h4>
 			The <span class="rule-name">JobToSpool</span> rule
@@ -128,7 +129,15 @@ span.rule-name, span.control-name {
 			<img src="images/rule-job-to-spool.png" />
 		</div>
 		<p>
-			indignant
+			<span class="rule-name">JobToSpool</span> allows a
+			print job (represented by a
+			<span class="control-name">J</span> control) to be
+			transferred from a user (represented by a
+			<span class="control-name">U</span> control) to a
+			spool (represented by an
+			<span class="control-name">S</span> control), adding
+			an identifying link to connect users to their submitted
+			print jobs. 
 		</p>
 		<h3>
 			Agents
@@ -139,17 +148,11 @@ span.rule-name, span.control-name {
 		<div class="figure">
 			<img src="images/agent-simple.png" />
 		</div>
-		<p>
-			jovial
-		</p>
 		<h4>
 			A more complex agent
 		</h4>
 		<div class="figure">
 			<img src="images/agent-complex.png" />
 		</div>
-		<p>
-			kipper
-		</p>
 	</body>
 </html>
