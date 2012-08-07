@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Big Red: A Development Environment for Bigraphs</title>
+		<style type="text/css">
+div.figure > img {
+	max-width: 90%;
+}
+
+div.title {
+	text-align: center;
+}
+
+span.ac {
+	font-family: monospace;
+}
+
+div.figure {
+	text-align: center;
+	text-decoration: italic;
+	
+	margin: 1px solid black;
+	padding: 0.5em;
+}
+
+div.figure td {
+	padding: 0.5em;
+	vertical-align: bottom;
+}
+
+span.rule-name, span.control-name, span.name-name {
+	font-family: monospace;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+		</style>
+	</head>
+	<body>
+		<div class="title">
+			<h1>
+				Big Red: A Development Environment for Bigraphs
+			</h1>
+			<p>
+				Alexander Faithfull, Gian Perrone, and Thomas
+				T. Hildebrandt<br />
+				IT University of Copenhagen, Denmark<br />
+				<span class="ac">{alef,gdpe,hilde}@itu.dk</span>
+			</p>
+		</div>
+		<h2>
+			The complete example
+		</h2>
+		<h3>
+			The signature
+		</h3>
+		<div class="figure"><table><tr>
+			<td>
+				<img src="images/control-room.png" /><br />
+				<span class="control-name">Room</span>
+			</td>
+			<td>
+				<img src="images/control-user.png" /><br />
+				<span class="control-name">User</span>
+			</td>
+			<td>
+				<img src="images/control-spool.png" /><br />
+				<span class="control-name">Spool</span>
+			</td>
+			<td>
+				<img src="images/control-printer.png" /><br />
+				<span class="control-name">Printer</span>
+			</td>
+			<td>
+				<img src="images/control-job.png" /><br />
+				<span class="control-name">Job</span>
+			</td>
+		</tr></table></div>
+		<h3>
+			The rules
+		</h3>
+		<h4>
+			The <span class="rule-name">MoveRoom</span> rule
+		</h4>
+		<div class="figure">
+			<img src="images/rule-move-room.png" />
+		</div>
+		<p>
+			The <span class="rule-name">MoveRoom</span> rule
+			matches a User (represented by a
+			<span class="control-name">U</span> control), and
+			selects any two rooms that are connected by some name
+			<span class="name-name">a</span>.  It then permits
+			the user to move to the other room, leaving the
+			contents of each room otherwise unchanged.
+		</p>
+		<h4>
+			The <span class="finish-job">FinishJob</span> rule
+		</h4>
+		<div class="figure">
+			<img src="images/rule-finish-job.png" />
+		</div>
+		<p>
+			<span class="rule-name">FinishJob</span> captures
+			the idea of a printer finishing a job (by executing the
+			actual print process), and the job is therefore removed
+			completely from the system by this rule, disconnecting
+			it from its associated user.
+		</p>
+		<h4>
+			The <span class="rule-name">JobToPrinter</span> rule
+		</h4>
+		<div class="figure">
+			<img src="images/rule-job-to-printer.png" />
+		</div>
+		<p>
+			<span class="rule-name">JobToPrinter</span>
+			transfers a job from the spool to a printer
+			(represented by a
+			<span class="control-name">P</span> control) that is
+			co-located with the user associated with that job.
+		</p>
+		<h4>
+			The <span class="rule-name">JobToSpool</span> rule
+		</h4>
+		<div class="figure">
+			<img src="images/rule-job-to-spool.png" />
+		</div>
+		<p>
+			<span class="rule-name">JobToSpool</span> allows a
+			print job (represented by a
+			<span class="control-name">J</span> control) to be
+			transferred from a user (represented by a
+			<span class="control-name">U</span> control) to a
+			spool (represented by an
+			<span class="control-name">S</span> control), adding
+			an identifying link to connect users to their submitted
+			print jobs. 
+		</p>
+		<h3>
+			Agents
+		</h3>
+		<h4>
+			A simple agent
+		</h4>
+		<div class="figure">
+			<img src="images/agent-simple.png" />
+		</div>
+		<h4>
+			A more complex agent
+		</h4>
+		<div class="figure">
+			<img src="images/agent-complex.png" />
+		</div>
+	</body>
+</html>
