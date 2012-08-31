@@ -36,12 +36,17 @@ table {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+a.sref {
+	font-family: monospace;
+}
 		</style>
 	</head>
 	<body>
 		<div class="title">
 			<h1>
-				Big Red: A Development Environment for Bigraphs
+				<a href="big-red-gcm2012.pdf">Big Red: A
+				Development Environment for Bigraphs</a>
 			</h1>
 			<p>
 				Alexander Faithfull, Gian Perrone, and Thomas
@@ -50,6 +55,14 @@ table {
 				<span class="ac">{alef,gdpe,hilde}@itu.dk</span>
 			</p>
 		</div>
+		<h2>
+			Getting Big Red
+		</h2>
+		<p>
+Big Red requires version 3.7 or later of the Eclipse Modeling Tools package,
+which is available from <a class="sref"
+href="http://www.eclipse.org/downloads">http://www.eclipse.org/downloads</a>.
+		</p>
 		<h2>
 			Systems modelled in bigraphs
 		</h2>
@@ -96,7 +109,7 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		<h3>
 			The rules
 		</h3>
-		<h4>
+		<h4 id="MoveRoom">
 			The <span class="rule-name">MoveRoom</span> rule
 		</h4>
 		<div class="figure">
@@ -105,14 +118,14 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		<p>
 			The <span class="rule-name">MoveRoom</span> rule
 			matches a User (represented by a
-			<span class="control-name">U</span> control), and
+			<span class="control-name">U</span> node), and
 			selects any two rooms that are connected by some name
 			<span class="name-name">a</span>.  It then permits
 			the user to move to the other room, leaving the
 			contents of each room otherwise unchanged.
 		</p>
-		<h4>
-			The <span class="finish-job">FinishJob</span> rule
+		<h4 id="FinishJob">
+			The <span class="rule-name">FinishJob</span> rule
 		</h4>
 		<div class="figure">
 			<img src="images/rule-finish-job.png" />
@@ -124,7 +137,7 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			completely from the system by this rule, disconnecting
 			it from its associated user.
 		</p>
-		<h4>
+		<h4 id="JobToPrinter">
 			The <span class="rule-name">JobToPrinter</span> rule
 		</h4>
 		<div class="figure">
@@ -134,10 +147,10 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			<span class="rule-name">JobToPrinter</span>
 			transfers a job from the spool to a printer
 			(represented by a
-			<span class="control-name">P</span> control) that is
+			<span class="control-name">P</span> node) that is
 			co-located with the user associated with that job.
 		</p>
-		<h4>
+		<h4 id="JobToSpool">
 			The <span class="rule-name">JobToSpool</span> rule
 		</h4>
 		<div class="figure">
@@ -146,11 +159,11 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		<p>
 			<span class="rule-name">JobToSpool</span> allows a
 			print job (represented by a
-			<span class="control-name">J</span> control) to be
+			<span class="control-name">J</span> node) to be
 			transferred from a user (represented by a
-			<span class="control-name">U</span> control) to a
+			<span class="control-name">U</span> node) to a
 			spool (represented by an
-			<span class="control-name">S</span> control), adding
+			<span class="control-name">S</span> node), adding
 			an identifying link to connect users to their submitted
 			print jobs. 
 		</p>
@@ -163,6 +176,31 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		<div class="figure">
 			<img src="images/agent-simple.png" />
 		</div>
+		<p>
+			This agent represents a simple office environment:&mdash;
+		</p>
+		<ul>
+		<li>
+			the single printer (represented by a <code>P</code>
+			node) is connected to the spool (represented by a
+			<code>S</code> node);
+		</li>
+		<li>
+			the single user (represented by a <code>U</code> node)
+			has a print job (represented by a <code>J</code> node),
+			which <a href="#JobToSpool">can be submitted to the
+			spool</a>; and
+		</li>
+		<li>
+			two rooms (represented by
+			<span class="control-name">R</span> nodes) are
+			connected by an edge, allowing the single user to <a
+			href="#MoveRoom">move between them</a>.
+		</li>
+		</ul>
+		<p>
+			After the 
+		</p>
 		<h4>
 			A more complex agent
 		</h4>
@@ -173,11 +211,10 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			Bibliography
 		</h2>
 
-<!-- This document was automatically generated with bibtex2html 1.97
+<!-- This list was automatically generated with bibtex2html 1.97
      (see http://www.lri.fr/~filliatr/bibtex2html/),
      with the following command:
      /usr/bin/bibtex2html gcm2012.bib  -->
-
 
 <table>
 
