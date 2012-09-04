@@ -149,6 +149,8 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			(represented by a
 			<span class="control-name">P</span> node) that is
 			co-located with the user associated with that job.
+			(Notice that printers may only contain one job at a
+			time.)
 		</p>
 		<h4 id="JobToSpool">
 			The <span class="rule-name">JobToSpool</span> rule
@@ -165,7 +167,7 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			spool (represented by an
 			<span class="control-name">S</span> node), adding
 			an identifying link to connect users to their submitted
-			print jobs. 
+			print jobs.
 		</p>
 		<h3>
 			Agents
@@ -198,12 +200,44 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 			href="#MoveRoom">move between them</a>.
 		</li>
 		</ul>
+		<p>
+			After both of these rules have fired once &mdash; that
+			is, after the job has been submitted to the spool and
+			the user has moved into the printer room &mdash; the
+			job can be <a href="#JobToPrinter">submitted to the
+			room's printer</a> and then
+			<a href="#FinishJob">printed</a>.
+		</p>
 		<h4>
 			A more complex agent
 		</h4>
 		<div class="figure">
 			<img src="images/agent-complex.png" />
 		</div>
+		<p>
+			This more complex environment contains:&mdash;
+		</p>
+		<ul>
+		<li>
+			a user with a print job (connected to the
+			<code>Michael</code> outer name), who can &mdash; as
+			before &mdash; <a href="#JobToSpool">submit his job to
+			the spool</a> and <a href="#MoveRoom">move between
+			rooms</a>;
+		</li>
+		<li>
+			a user with <em>no</em> print job (connected to the
+			<code>David</code> outer name), who can only <a
+			href="#MoveRoom">move fruitlessly between rooms</a>;
+			and
+		</li>
+		<li>
+			<em>two</em> printers, each of which can independently
+			<a href="#JobToSpool">receive</a> and <a
+			href="#FinishJob">print</a> jobs.
+		</li>
+		</ul>
+		</p>
 		<h2>
 			Bibliography
 		</h2>
