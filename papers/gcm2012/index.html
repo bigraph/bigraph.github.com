@@ -11,6 +11,17 @@ div.title {
 	text-align: center;
 }
 
+.caption {
+	background-color: #DDD;
+}
+
+div.figure > div.caption {
+	padding: 0.5em;
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
 span.ac {
 	font-family: monospace;
 }
@@ -19,7 +30,7 @@ div.figure {
 	text-align: center;
 	text-decoration: italic;
 	
-	margin: 1px solid black;
+	border: 1px solid gray;
 	padding: 0.5em;
 }
 
@@ -81,31 +92,46 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		<h2>
 			The complete example
 		</h2>
+		<p>
+			(Each figure is annotated with
+			<code class="caption">black-on-gray monospaced text</code>
+			giving a corresponding representation in the term
+			language of the <a href="http://bigraph.org/bigmc/">BigMC</a> tool.)
+		</p>
 		<h3>
 			The signature
 		</h3>
-		<div class="figure"><table><tr>
-			<td>
-				<img src="images/control-room.png" /><br />
-				<span class="control-name">Room</span>
-			</td>
-			<td>
-				<img src="images/control-user.png" /><br />
-				<span class="control-name">User</span>
-			</td>
-			<td>
-				<img src="images/control-spool.png" /><br />
-				<span class="control-name">Spool</span>
-			</td>
-			<td>
-				<img src="images/control-printer.png" /><br />
-				<span class="control-name">Printer</span>
-			</td>
-			<td>
-				<img src="images/control-job.png" /><br />
-				<span class="control-name">Job</span>
-			</td>
-		</tr></table></div>
+		<div class="figure">
+			<table><tr>
+				<td>
+					<img src="images/control-room.png" /><br />
+					<span class="control-name">Room</span>
+				</td>
+				<td>
+					<img src="images/control-user.png" /><br />
+					<span class="control-name">User</span>
+				</td>
+				<td>
+					<img src="images/control-spool.png" /><br />
+					<span class="control-name">Spool</span>
+				</td>
+				<td>
+					<img src="images/control-printer.png" /><br />
+					<span class="control-name">Printer</span>
+				</td>
+				<td>
+					<img src="images/control-job.png" /><br />
+					<span class="control-name">Job</span>
+				</td>
+			</tr></table>
+			<div class="caption"><code>
+<pre>%active Printer : 1;
+%active User : 1;
+%active Job : 1;
+%active Room : 1;
+%active Spool : 1;</pre></code>
+			</div>
+		</div>
 		<h3>
 			The rules
 		</h3>
@@ -114,6 +140,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/rule-move-room.png" />
+			<div class="caption"><code>
+Room[a].(User[b].$3 | $1) || Room[a].$2 -> Room[a].$1 || Room[a].($2 | User[b].$3);
+			</code></div>
 		</div>
 		<p>
 			The <span class="rule-name">MoveRoom</span> rule
@@ -129,6 +158,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/rule-finish-job.png" />
+			<div class="caption"><code>
+Printer[b].Job[a] -> Printer[b];
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">FinishJob</span> captures
@@ -142,6 +174,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/rule-job-to-printer.png" />
+			<div class="caption"><code>
+Room[c].(Printer[a] | User[b].$3 | $1) || Spool[a].(Job[b] | $2) -> Room[c].(Printer[a].Job[b] | User[b].$3 | $1) || Spool[a].$2;
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">JobToPrinter</span>
@@ -157,6 +192,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/rule-job-to-spool.png" />
+			<div class="caption"><code>
+User[x].(Job[-] | $1) || Spool[y].$2 -> User[x].$1 || Spool[y].($2 | Job[x]);
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">JobToSpool</span> allows a
@@ -177,6 +215,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/agent-simple.png" />
+			<div class="caption"><code>
+Room[b].Printer[a] | Spool[a] | Room[b].User[User].Job[-];
+			</code></div>
 		</div>
 		<p>
 			This agent represents a simple office environment:&mdash;
@@ -213,6 +254,9 @@ and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]
 		</h4>
 		<div class="figure">
 			<img src="images/agent-complex.png" />
+			<div class="caption"><code>
+Room[b].Printer[a] | Room[b].Printer[a] | Spool[a] | Room[b].User[Michael].Job[-] | Room[b].User[David];
+			</code></div>
 		</div>
 		<p>
 			This more complex environment contains:&mdash;
