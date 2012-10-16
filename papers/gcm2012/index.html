@@ -11,6 +11,17 @@ div.title {
 	text-align: center;
 }
 
+.caption {
+	background-color: #DDD;
+}
+
+div.figure > div.caption {
+	padding: 0.5em;
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
 span.ac {
 	font-family: monospace;
 }
@@ -19,7 +30,7 @@ div.figure {
 	text-align: center;
 	text-decoration: italic;
 	
-	margin: 1px solid black;
+	border: 1px solid gray;
 	padding: 0.5em;
 }
 
@@ -36,12 +47,17 @@ table {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+a.sref {
+	font-family: monospace;
+}
 		</style>
 	</head>
 	<body>
 		<div class="title">
 			<h1>
-				Big Red: A Development Environment for Bigraphs
+				<a href="big-red-gcm2012.pdf">Big Red: A
+				Development Environment for Bigraphs</a>
 			</h1>
 			<p>
 				Alexander Faithfull, Gian Perrone, and Thomas
@@ -51,56 +67,116 @@ table {
 			</p>
 		</div>
 		<h2>
+			Getting Big Red
+		</h2>
+		<p>
+			Big Red requires version 3.7 or later of the Eclipse
+			Modeling Tools package, which is available from
+			<a class="sref" href="http://www.eclipse.org/downloads">http://www.eclipse.org/downloads</a>.
+		</p>
+		<p>
+			Once you have a suitable version of Eclipse:&mdash;
+		</p>
+		<ul>
+			<li>
+				<a href="http://bigraph.org/big-red/latest">download
+				a compiled version of Big Red</a> and extract
+				it into Eclipse's <code>dropins/</code> folder;
+				or
+			</li>
+			<li>
+				<a href="https://github.com/ale-f/big-red">get
+				the source code</a> and follow the instructions
+				in the <code>doc/running.txt</code> file.
+			</li>
+		</ul>
+		<h2>
+			Systems modelled in bigraphs
+		</h2>
+		<p>
+		Bigraphs have been successful in capturing the syntax and semantics of a number
+of well-known formalisms (e.g.,
+&pi;-calculus<a href="#jensen06mobile">[1]</a>,
+Petri Nets<a href="#leifer06transition">[2]</a>,
+CCS<a href="#milner06pure">[3]</a>, and many more), as well as more diverse
+applications such as
+business processes<a href="#HildeBrandtEtAl:2006:BPEL">[4]</a>,
+systems biology<a href="#damgaard2008generic">[5]</a>,
+wireless networks<a href="#calder2012process">[6]</a>,
+and applications for context-aware systems<a href="#birkedal2006bigraphical">[7]</a>.
+		</p>
+		<h2>
 			The complete example
 		</h2>
+		<p>
+			(Each figure is annotated with
+			<code class="caption">black-on-gray monospaced text</code>
+			giving a corresponding representation in the term
+			language of the <a href="http://bigraph.org/bigmc/">BigMC</a> tool.)
+		</p>
 		<h3>
 			The signature
 		</h3>
-		<div class="figure"><table><tr>
-			<td>
-				<img src="images/control-room.png" /><br />
-				<span class="control-name">Room</span>
-			</td>
-			<td>
-				<img src="images/control-user.png" /><br />
-				<span class="control-name">User</span>
-			</td>
-			<td>
-				<img src="images/control-spool.png" /><br />
-				<span class="control-name">Spool</span>
-			</td>
-			<td>
-				<img src="images/control-printer.png" /><br />
-				<span class="control-name">Printer</span>
-			</td>
-			<td>
-				<img src="images/control-job.png" /><br />
-				<span class="control-name">Job</span>
-			</td>
-		</tr></table></div>
+		<div class="figure">
+			<table><tr>
+				<td>
+					<img src="images/control-room.png" /><br />
+					<span class="control-name">Room</span>
+				</td>
+				<td>
+					<img src="images/control-user.png" /><br />
+					<span class="control-name">User</span>
+				</td>
+				<td>
+					<img src="images/control-spool.png" /><br />
+					<span class="control-name">Spool</span>
+				</td>
+				<td>
+					<img src="images/control-printer.png" /><br />
+					<span class="control-name">Printer</span>
+				</td>
+				<td>
+					<img src="images/control-job.png" /><br />
+					<span class="control-name">Job</span>
+				</td>
+			</tr></table>
+			<div class="caption"><code>
+<pre>%active Printer : 1;
+%active User : 1;
+%active Job : 1;
+%active Room : 1;
+%active Spool : 1;</pre></code>
+			</div>
+		</div>
 		<h3>
 			The rules
 		</h3>
-		<h4>
+		<h4 id="MoveRoom">
 			The <span class="rule-name">MoveRoom</span> rule
 		</h4>
 		<div class="figure">
 			<img src="images/rule-move-room.png" />
+			<div class="caption"><code>
+Room[a].(User[b].$3 | $1) || Room[a].$2 -> Room[a].$1 || Room[a].($2 | User[b].$3);
+			</code></div>
 		</div>
 		<p>
 			The <span class="rule-name">MoveRoom</span> rule
 			matches a User (represented by a
-			<span class="control-name">U</span> control), and
+			<span class="control-name">U</span> node), and
 			selects any two rooms that are connected by some name
 			<span class="name-name">a</span>.  It then permits
 			the user to move to the other room, leaving the
 			contents of each room otherwise unchanged.
 		</p>
-		<h4>
-			The <span class="finish-job">FinishJob</span> rule
+		<h4 id="FinishJob">
+			The <span class="rule-name">FinishJob</span> rule
 		</h4>
 		<div class="figure">
 			<img src="images/rule-finish-job.png" />
+			<div class="caption"><code>
+Printer[b].Job[a] -> Printer[b];
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">FinishJob</span> captures
@@ -109,35 +185,43 @@ table {
 			completely from the system by this rule, disconnecting
 			it from its associated user.
 		</p>
-		<h4>
+		<h4 id="JobToPrinter">
 			The <span class="rule-name">JobToPrinter</span> rule
 		</h4>
 		<div class="figure">
 			<img src="images/rule-job-to-printer.png" />
+			<div class="caption"><code>
+Room[c].(Printer[a] | User[b].$3 | $1) || Spool[a].(Job[b] | $2) -> Room[c].(Printer[a].Job[b] | User[b].$3 | $1) || Spool[a].$2;
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">JobToPrinter</span>
 			transfers a job from the spool to a printer
 			(represented by a
-			<span class="control-name">P</span> control) that is
+			<span class="control-name">P</span> node) that is
 			co-located with the user associated with that job.
+			(Notice that printers may only contain one job at a
+			time.)
 		</p>
-		<h4>
+		<h4 id="JobToSpool">
 			The <span class="rule-name">JobToSpool</span> rule
 		</h4>
 		<div class="figure">
 			<img src="images/rule-job-to-spool.png" />
+			<div class="caption"><code>
+User[x].(Job[-] | $1) || Spool[y].$2 -> User[x].$1 || Spool[y].($2 | Job[x]);
+			</code></div>
 		</div>
 		<p>
 			<span class="rule-name">JobToSpool</span> allows a
 			print job (represented by a
-			<span class="control-name">J</span> control) to be
+			<span class="control-name">J</span> node) to be
 			transferred from a user (represented by a
-			<span class="control-name">U</span> control) to a
+			<span class="control-name">U</span> node) to a
 			spool (represented by an
-			<span class="control-name">S</span> control), adding
+			<span class="control-name">S</span> node), adding
 			an identifying link to connect users to their submitted
-			print jobs. 
+			print jobs.
 		</p>
 		<h3>
 			Agents
@@ -147,12 +231,191 @@ table {
 		</h4>
 		<div class="figure">
 			<img src="images/agent-simple.png" />
+			<div class="caption"><code>
+Room[b].Printer[a] | Spool[a] | Room[b].User[User].Job[-];
+			</code></div>
 		</div>
+		<p>
+			This agent represents a simple office environment:&mdash;
+		</p>
+		<ul>
+		<li>
+			the single printer (represented by a <code>P</code>
+			node) is connected to the spool (represented by a
+			<code>S</code> node);
+		</li>
+		<li>
+			the single user (represented by a <code>U</code> node)
+			has a print job (represented by a <code>J</code> node),
+			which <a href="#JobToSpool">can be submitted to the
+			spool</a>; and
+		</li>
+		<li>
+			two rooms (represented by
+			<span class="control-name">R</span> nodes) are
+			connected by an edge, allowing the single user to <a
+			href="#MoveRoom">move between them</a>.
+		</li>
+		</ul>
+		<p>
+			After both of these rules have fired once &mdash; that
+			is, after the job has been submitted to the spool and
+			the user has moved into the printer room &mdash; the
+			job can be <a href="#JobToPrinter">submitted to the
+			room's printer</a> and then
+			<a href="#FinishJob">printed</a>.
+		</p>
 		<h4>
 			A more complex agent
 		</h4>
 		<div class="figure">
 			<img src="images/agent-complex.png" />
+			<div class="caption"><code>
+Room[b].Printer[a] | Room[b].Printer[a] | Spool[a] | Room[b].User[Michael].Job[-] | Room[b].User[David];
+			</code></div>
 		</div>
+		<p>
+			This more complex environment contains:&mdash;
+		</p>
+		<ul>
+		<li>
+			a user with a print job (connected to the
+			<code>Michael</code> outer name), who can &mdash; as
+			before &mdash; <a href="#JobToSpool">submit his job to
+			the spool</a> and <a href="#MoveRoom">move between
+			rooms</a>;
+		</li>
+		<li>
+			a user with <em>no</em> print job (connected to the
+			<code>David</code> outer name), who can only <a
+			href="#MoveRoom">move fruitlessly between rooms</a>;
+			and
+		</li>
+		<li>
+			<em>two</em> printers, each of which can independently
+			<a href="#JobToSpool">receive</a> and <a
+			href="#FinishJob">print</a> jobs.
+		</li>
+		</ul>
+		</p>
+		<h2>
+			Bibliography
+		</h2>
+
+<!-- This list was automatically generated with bibtex2html 1.97
+     (see http://www.lri.fr/~filliatr/bibtex2html/),
+     with the following command:
+     /usr/bin/bibtex2html gcm2012.bib  -->
+
+<table>
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="jensen06mobile">1</a>]
+</td>
+<td class="bibtexitem">
+O.H. Jensen.
+ Mobile processes in bigraphs.
+ Available at
+  <a href="http://www.cl.cam.ac.uk/~rm135/Jensen-monograph.pdf">http://www.cl.cam.ac.uk/~rm135/Jensen-monograph.pdf</a>, October 2006.
+[&nbsp;<a href="gcm2012_bib.html#jensen06mobile">bib</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="leifer06transition">2</a>]
+</td>
+<td class="bibtexitem">
+J.&nbsp;Leifer and R.&nbsp;Milner.
+ Transition systems, link graphs and Petri nets.
+ <em>Journal of Mathematical Structures in Computer Science</em>,
+  16(6):989-1047, 2006.
+[&nbsp;<a href="gcm2012_bib.html#leifer06transition">bib</a>&nbsp;| 
+<a href="http://dx.doi.org/10.1017/S0960129506005664">DOI</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="milner06pure">3</a>]
+</td>
+<td class="bibtexitem">
+R.&nbsp;Milner.
+ Pure bigraphs: Structure and dynamics.
+ <em>Information and Computation</em>, 204(1):60-122, January 2006.
+[&nbsp;<a href="gcm2012_bib.html#milner06pure">bib</a>&nbsp;| 
+<a href="http://dx.doi.org/10.1016/j.ic.2005.07.003">DOI</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="HildeBrandtEtAl:2006:BPEL">4</a>]
+</td>
+<td class="bibtexitem">
+T.T. Hildebrandt, H.&nbsp;Niss, and M.&nbsp;Olsen.
+ Formalising Business Process Execution with Bigraphs and Reactive
+  XML.
+ In <em>COORDINATION'06</em>, volume 4038 of <em>Lecture Notes in
+  Computer Science</em>, pages 113-129. Springer-Verlag, January 2006.
+[&nbsp;<a href="gcm2012_bib.html#HildeBrandtEtAl:2006:BPEL">bib</a>&nbsp;| 
+<a href="http://dx.doi.org/10.1007/11767954_8">DOI</a>&nbsp;| 
+<a href="http://www.itu.dk/people/hniss/pubs/coordination2006.pdf">.pdf</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="damgaard2008generic">5</a>]
+</td>
+<td class="bibtexitem">
+T.C. Damgaard and J.&nbsp;Krivine.
+ A generic language for biological systems based on bigraphs.
+ Technical report, Citeseer, 2008.
+[&nbsp;<a href="gcm2012_bib.html#damgaard2008generic">bib</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="calder2012process">6</a>]
+</td>
+<td class="bibtexitem">
+M.&nbsp;Calder and M.&nbsp;Sevegnani.
+ Process algebra for event-driven runtime verification: a case study
+  of wireless network management.
+ In <em>Integrated Formal Methods</em>, pages 21-23. Springer, 2012.
+[&nbsp;<a href="gcm2012_bib.html#calder2012process">bib</a>&nbsp;]
+
+</td>
+</tr>
+
+
+<tr valign="top">
+<td align="right" class="bibtexnumber">
+[<a name="birkedal2006bigraphical">7</a>]
+</td>
+<td class="bibtexitem">
+L.&nbsp;Birkedal, S.&nbsp;Debois, E.&nbsp;Elsborg, T.T. Hildebrandt, and H.&nbsp;Niss.
+ Bigraphical models of context-aware systems.
+ In <em>Foundations of Software Science and Computation Structures</em>,
+  pages 187-201. Springer, 2006.
+[&nbsp;<a href="gcm2012_bib.html#birkedal2006bigraphical">bib</a>&nbsp;| 
+<a href="http://dx.doi.org/10.1007/11690634_13">DOI</a>&nbsp;]
+
+</td>
+</tr>
+</table>
 	</body>
 </html>
