@@ -28,13 +28,13 @@ Submission
 ==========
 Please use the EasyChair style (http://www.easychair.org/publications/easychair.zip) for submissions of no more than 2 pages via EasyChair (https://www.easychair.org/conferences/?conf=bigraph2013).
 
-Local Organisers
-================
-Alexander Faithfull, IT University of Copenhagen
-Gian Perrone, IT University of Copenhagen
+After the workshop, submissions will be selected for invitation to undergo review for inclusion in a special issue.
 
-Workshop Chair
-==============
-Thomas Hildebrandt, IT University of Copenhagen
+Organisers
+================
+Chair: Thomas Hildebrandt, IT University of Copenhagen
+Alexander Faithfull, IT University of Copenhagen
+Marino Miculan, University of Udine
+Gian Perrone, IT University of Copenhagen
 
 
