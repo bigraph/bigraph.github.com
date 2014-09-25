@@ -1,0 +1,38 @@
+Third International Workshop on Bigraphs (Bigraph 2013)
+=======================================================
+Copenhagen, Denmark - http://bigraph.org/bigraph2013/
+
+We are now soliciting presentations for the Third International Workshop on Bigraphs (Bigraphs 2013), to be held at the IT University of Copenhagen in February 2013.  Speakers are invited to submit an abstract of no more than two pages as a proposal for a talk to be given during the workshop.  Summaries of work in progress or intended future research are also welcome.
+
+Any research related to bigraphs is within scope, for example (but not limited to):
+
+* Applications of bigraphs
+* Meta-modelling and meta-calculi
+* Context-aware and ubiquitous computing
+* Networks and distributed systems
+* Variations upon bigraphs
+* Alternative presentations of bigraphs
+* Bigraph tools and algorithms
+* Systems biology
+* Simulation
+
+The workshop is sponsored by the Jingling Genies project (Danish Research Agency grant no.: 2106-080046) and the IT University of Copenhagen.
+
+Important Dates
+===============
+* Submission of abstracts (up to 2 pages) for presentations: Monday 21 January 2013
+* Notification: Monday 28 January 2013
+* Workshop: Saturday 16 February 2013
+
+Submission
+==========
+Please use the EasyChair style (http://www.easychair.org/publications/easychair.zip) for submissions of no more than 2 pages via EasyChair (https://www.easychair.org/conferences/?conf=bigraph2013).
+
+Organisers
+================
+Chair: Thomas Hildebrandt, IT University of Copenhagen
+Alexander Faithfull, IT University of Copenhagen
+Marino Miculan, University of Udine
+Gian Perrone, IT University of Copenhagen
+
+
